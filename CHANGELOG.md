@@ -20,3 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ClientSession` per-connection state and the `ConnectionHandler` strategy
   interface that keeps the server layer decoupled from the protocol/command
   layers.
+- RediSet wire protocol (RSP): an original request/response format documented in
+  `docs/protocol/protocol.md`, with a sealed `Reply` type hierarchy
+  (simple string, error, integer, bulk string, array, null).
+- `ProtocolDecoder` (array and inline command forms, binary-safe bulk strings,
+  partial-read and EOF handling, enforced size limits), `ProtocolEncoder`,
+  `ResponseWriter`, and `CommandParser`.
+- Configurable protocol limits (`ProtocolLimits`) for bulk-string size, array
+  size, and total request size.
