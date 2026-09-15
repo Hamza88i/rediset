@@ -28,3 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ResponseWriter`, and `CommandParser`.
 - Configurable protocol limits (`ProtocolLimits`) for bulk-string size, array
   size, and total request size.
+- Command engine: `Command` interface (name/arity/validate/execute),
+  `CommandRegistry` (table-driven dispatch, no giant switch), `CommandExecutor`
+  (validation and error-to-reply translation), and `CommandContext`.
+- `RedisetConnectionHandler` wiring the decode → parse → execute → write loop,
+  and the first commands `PING` and `ECHO` as an end-to-end vertical slice.
+- Command exception hierarchy: `CommandException`, `UnknownCommandException`,
+  `CommandArityException`, `WrongTypeException`, `InvalidArgumentException`.
