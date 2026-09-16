@@ -40,10 +40,12 @@ class CommandRegistryTest {
     }
 
     @Test
-    void factoryShouldRegisterConnectionCommands() {
+    void factoryShouldRegisterBuiltInCommands() {
         CommandRegistry registry = CommandRegistryFactory.createDefault();
-        assertTrue(registry.contains("PING"));
-        assertTrue(registry.contains("ECHO"));
-        assertEquals(2, registry.size());
+        for (String name : new String[] {
+                "PING", "ECHO", "SET", "GET", "DEL", "EXISTS", "KEYS", "DBSIZE", "TYPE"}) {
+            assertTrue(registry.contains(name), () -> "missing command: " + name);
+        }
+        assertEquals(9, registry.size());
     }
 }

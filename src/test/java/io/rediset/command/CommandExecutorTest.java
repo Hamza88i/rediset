@@ -13,6 +13,7 @@ import io.rediset.protocol.Reply.BulkStringReply;
 import io.rediset.protocol.Reply.ErrorReply;
 import io.rediset.protocol.Reply.SimpleStringReply;
 import io.rediset.server.ClientSession;
+import io.rediset.storage.StorageEngine;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class CommandExecutorTest {
         registry.register(new PingCommand());
         registry.register(new EchoCommand());
         executor = new CommandExecutor(registry);
-        context = new CommandContext(new ClientSession(1L, null));
+        context = new CommandContext(new ClientSession(1L, null), new StorageEngine());
     }
 
     private static ParsedCommand parse(String... tokens) {

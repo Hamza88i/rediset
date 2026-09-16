@@ -9,6 +9,7 @@ import io.rediset.protocol.Reply;
 import io.rediset.protocol.ResponseWriter;
 import io.rediset.server.ClientSession;
 import io.rediset.server.ConnectionHandler;
+import io.rediset.storage.StorageEngine;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,17 +33,20 @@ public final class RedisetConnectionHandler implements ConnectionHandler {
 
     private final CommandExecutor executor;
     private final ProtocolLimits limits;
+    private final StorageEngine storage;
 
-    public RedisetConnectionHandler(CommandExecutor executor, ProtocolLimits limits) {
+    public RedisetConnectionHandler(CommandExecutor executor, ProtocolLimits limits,
+            StorageEngine storage) {
         this.executor = executor;
         this.limits = limits;
+        this.storage = storage;
     }
 
     @Override
     public void handle(ClientSession session, InputStream in, OutputStream out) throws IOException {
         ProtocolDecoder decoder = new ProtocolDecoder(in, limits);
         ResponseWriter writer = new ResponseWriter(out);
-        CommandContext context = new CommandContext(session);
+        CommandContext context = new CommandContext(session, storage);
 
         while (!session.isClosing()) {
             ParsedCommand parsed;

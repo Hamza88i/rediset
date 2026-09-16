@@ -7,6 +7,7 @@ import io.rediset.protocol.ProtocolLimits;
 import io.rediset.server.ConnectionHandler;
 import io.rediset.server.NetworkConfig;
 import io.rediset.server.RedisetServer;
+import io.rediset.storage.StorageEngine;
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -18,19 +19,30 @@ import java.net.ServerSocket;
 final class RedisetServerFixture implements AutoCloseable {
 
     private final RedisetServer server;
+    private final StorageEngine storage;
 
-    private RedisetServerFixture(RedisetServer server) {
+    private RedisetServerFixture(RedisetServer server, StorageEngine storage) {
         this.server = server;
+        this.storage = storage;
     }
 
     static RedisetServerFixture start(CommandRegistry registry) throws IOException {
+        return start(registry, new StorageEngine());
+    }
+
+    static RedisetServerFixture start(CommandRegistry registry, StorageEngine storage)
+            throws IOException {
         CommandExecutor executor = new CommandExecutor(registry);
         ConnectionHandler handler =
-                new RedisetConnectionHandler(executor, ProtocolLimits.defaults());
+                new RedisetConnectionHandler(executor, ProtocolLimits.defaults(), storage);
         NetworkConfig config = new NetworkConfig("127.0.0.1", freePort(), 100, 0);
         RedisetServer server = new RedisetServer(config, handler);
         server.start();
-        return new RedisetServerFixture(server);
+        return new RedisetServerFixture(server, storage);
+    }
+
+    StorageEngine storage() {
+        return storage;
     }
 
     RedisetTestClient newClient() throws IOException {

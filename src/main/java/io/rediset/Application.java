@@ -9,6 +9,7 @@ import io.rediset.protocol.ProtocolLimits;
 import io.rediset.server.ConnectionHandler;
 import io.rediset.server.NetworkConfig;
 import io.rediset.server.RedisetServer;
+import io.rediset.storage.StorageEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +29,10 @@ public final class Application {
         NetworkConfig networkConfig = NetworkConfig.from(config);
         ProtocolLimits limits = ProtocolLimits.from(config);
 
+        StorageEngine storage = new StorageEngine();
         CommandRegistry registry = CommandRegistryFactory.createDefault();
         CommandExecutor executor = new CommandExecutor(registry);
-        ConnectionHandler handler = new RedisetConnectionHandler(executor, limits);
+        ConnectionHandler handler = new RedisetConnectionHandler(executor, limits, storage);
 
         RedisetServer server = new RedisetServer(networkConfig, handler);
         Runtime.getRuntime().addShutdownHook(new Thread(server::shutdown, "rediset-shutdown"));

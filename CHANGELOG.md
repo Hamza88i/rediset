@@ -35,3 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the first commands `PING` and `ECHO` as an end-to-end vertical slice.
 - Command exception hierarchy: `CommandException`, `UnknownCommandException`,
   `CommandArityException`, `WrongTypeException`, `InvalidArgumentException`.
+- Core storage engine (`StorageEngine`) backed by a `ConcurrentHashMap` with
+  type-checked access that raises `WRONGTYPE` on mismatch, and the value-type
+  abstraction (`RedisetValue`, `DataType`, `StringValue`).
+- MVP commands: `SET`, `GET`, `DEL`, `EXISTS`, `KEYS`, `DBSIZE`, and `TYPE`,
+  including a dependency-free glob matcher for `KEYS`.
+- Command reference documentation and an expanded README describing the
+  architecture, protocol, commands, and honest current limitations.
