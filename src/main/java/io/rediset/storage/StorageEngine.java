@@ -143,6 +143,44 @@ public final class StorageEngine {
     }
 
     /**
+     * Atomically returns the existing value for {@code key} (cast to
+     * {@code expectedClass}), creating one with {@code factory} if the key is
+     * absent or expired. Used by collection commands that must fetch-or-create in
+     * one step.
+     *
+     * @throws WrongTypeException if an existing value has a different type
+     */
+    public <T extends RedisetValue> T getOrCreateTyped(String key, DataType expected,
+            Class<T> expectedClass, Supplier<T> factory) {
+        expireIfNeeded(key);
+        RedisetValue value = data.compute(key, (k, current) -> {
+            if (current == null) {
+                return factory.get();
+            }
+            if (current.type() != expected) {
+                throw new WrongTypeException();
+            }
+            return current;
+        });
+        return expectedClass.cast(value);
+    }
+
+    /**
+     * Removes {@code key} if the given value is now empty. Used by collection
+     * commands so that a list/set/hash that becomes empty deletes its key, matching
+     * the convention that an empty aggregate does not linger.
+     */
+    public void removeIfEmpty(String key, java.util.function.Predicate<RedisetValue> isEmpty) {
+        data.computeIfPresent(key, (k, current) -> {
+            if (isEmpty.test(current)) {
+                expiries.remove(k);
+                return null;
+            }
+            return current;
+        });
+    }
+
+    /**
      * Removes {@code key} and any associated expiry.
      *
      * @return {@code true} if a live value was present and removed
