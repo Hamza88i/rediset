@@ -42,3 +42,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   including a dependency-free glob matcher for `KEYS`.
 - Command reference documentation and an expanded README describing the
   architecture, protocol, commands, and honest current limitations.
+- Key expiration (ADR-004): lazy expiration on access plus a single background
+  `ExpirationSweeper` that samples a bounded number of TTL-bearing keys per tick
+  (explicitly not one thread per key). A `Clock` abstraction makes TTL behavior
+  deterministically testable.
+- TTL commands: `EXPIRE`, `PEXPIRE`, `TTL`, `PTTL`, `PERSIST`, with consistent
+  value-map/expiry-map invariants enforced in the storage engine.

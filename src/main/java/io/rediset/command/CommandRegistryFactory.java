@@ -4,10 +4,15 @@ import io.rediset.command.commands.DbSizeCommand;
 import io.rediset.command.commands.DelCommand;
 import io.rediset.command.commands.EchoCommand;
 import io.rediset.command.commands.ExistsCommand;
+import io.rediset.command.commands.ExpireCommand;
 import io.rediset.command.commands.GetCommand;
 import io.rediset.command.commands.KeysCommand;
+import io.rediset.command.commands.PersistCommand;
+import io.rediset.command.commands.PexpireCommand;
 import io.rediset.command.commands.PingCommand;
+import io.rediset.command.commands.PttlCommand;
 import io.rediset.command.commands.SetCommand;
+import io.rediset.command.commands.TtlCommand;
 import io.rediset.command.commands.TypeCommand;
 
 /**
@@ -24,6 +29,7 @@ public final class CommandRegistryFactory {
         CommandRegistry registry = new CommandRegistry();
         registerConnectionCommands(registry);
         registerKeyCommands(registry);
+        registerExpirationCommands(registry);
         return registry;
     }
 
@@ -40,5 +46,13 @@ public final class CommandRegistryFactory {
         registry.register(new KeysCommand());
         registry.register(new DbSizeCommand());
         registry.register(new TypeCommand());
+    }
+
+    private static void registerExpirationCommands(CommandRegistry registry) {
+        registry.register(new ExpireCommand());
+        registry.register(new PexpireCommand());
+        registry.register(new TtlCommand());
+        registry.register(new PttlCommand());
+        registry.register(new PersistCommand());
     }
 }

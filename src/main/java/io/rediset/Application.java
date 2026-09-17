@@ -5,6 +5,8 @@ import io.rediset.command.CommandRegistry;
 import io.rediset.command.CommandRegistryFactory;
 import io.rediset.command.RedisetConnectionHandler;
 import io.rediset.config.ServerConfig;
+import io.rediset.expiration.ExpirationConfig;
+import io.rediset.expiration.ExpirationSweeper;
 import io.rediset.protocol.ProtocolLimits;
 import io.rediset.server.ConnectionHandler;
 import io.rediset.server.NetworkConfig;
@@ -34,10 +36,17 @@ public final class Application {
         CommandExecutor executor = new CommandExecutor(registry);
         ConnectionHandler handler = new RedisetConnectionHandler(executor, limits, storage);
 
+        ExpirationSweeper sweeper =
+                new ExpirationSweeper(storage, ExpirationConfig.from(config));
         RedisetServer server = new RedisetServer(networkConfig, handler);
-        Runtime.getRuntime().addShutdownHook(new Thread(server::shutdown, "rediset-shutdown"));
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            server.shutdown();
+            sweeper.stop();
+        }, "rediset-shutdown"));
 
         log.info("Starting RediSet with {} registered command(s)", registry.size());
+        sweeper.start();
         server.start();
         server.awaitTermination();
     }

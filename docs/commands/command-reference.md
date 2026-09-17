@@ -60,6 +60,36 @@ integer (`:`), bulk string (`$`), array (`*`), null (`_`).
 - **Reply:** simple string naming the value type (`string`, `list`, `set`,
   `hash`, `zset`), or `none` if the key does not exist.
 
+## Expiration (TTL)
+
+### `EXPIRE key seconds`
+
+- **Arity:** exactly 3 tokens.
+- **Reply:** `:1` if the timeout was set (or the key deleted for a non-positive
+  TTL), `:0` if the key does not exist.
+
+### `PEXPIRE key milliseconds`
+
+- **Arity:** exactly 3 tokens.
+- **Reply:** as `EXPIRE`, but the TTL is in milliseconds.
+
+### `TTL key`
+
+- **Arity:** exactly 2 tokens.
+- **Reply:** remaining TTL in whole seconds (rounded up), `-1` if the key has no
+  expiry, `-2` if the key does not exist.
+
+### `PTTL key`
+
+- **Arity:** exactly 2 tokens.
+- **Reply:** remaining TTL in milliseconds, `-1` if no expiry, `-2` if no key.
+
+### `PERSIST key`
+
+- **Arity:** exactly 2 tokens.
+- **Reply:** `:1` if an expiry was removed, `:0` if the key does not exist or had
+  no expiry.
+
 ## Errors
 
 | Error prefix | Meaning |

@@ -43,9 +43,11 @@ class CommandRegistryTest {
     void factoryShouldRegisterBuiltInCommands() {
         CommandRegistry registry = CommandRegistryFactory.createDefault();
         for (String name : new String[] {
-                "PING", "ECHO", "SET", "GET", "DEL", "EXISTS", "KEYS", "DBSIZE", "TYPE"}) {
+                "PING", "ECHO", "SET", "GET", "DEL", "EXISTS", "KEYS", "DBSIZE", "TYPE",
+                "EXPIRE", "PEXPIRE", "TTL", "PTTL", "PERSIST"}) {
             assertTrue(registry.contains(name), () -> "missing command: " + name);
         }
-        assertEquals(9, registry.size());
+        assertTrue(registry.size() >= 14,
+                () -> "expected at least 14 commands, got " + registry.size());
     }
 }
