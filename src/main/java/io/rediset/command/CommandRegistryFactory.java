@@ -6,6 +6,13 @@ import io.rediset.command.commands.EchoCommand;
 import io.rediset.command.commands.ExistsCommand;
 import io.rediset.command.commands.ExpireCommand;
 import io.rediset.command.commands.GetCommand;
+import io.rediset.command.commands.HdelCommand;
+import io.rediset.command.commands.HgetCommand;
+import io.rediset.command.commands.HgetallCommand;
+import io.rediset.command.commands.HkeysCommand;
+import io.rediset.command.commands.HlenCommand;
+import io.rediset.command.commands.HsetCommand;
+import io.rediset.command.commands.HvalsCommand;
 import io.rediset.command.commands.KeysCommand;
 import io.rediset.command.commands.LindexCommand;
 import io.rediset.command.commands.LlenCommand;
@@ -44,6 +51,7 @@ public final class CommandRegistryFactory {
         registerExpirationCommands(registry);
         registerListCommands(registry);
         registerSetCommands(registry);
+        registerHashCommands(registry);
         return registry;
     }
 
@@ -86,5 +94,15 @@ public final class CommandRegistryFactory {
         registry.register(new SmembersCommand());
         registry.register(new SismemberCommand());
         registry.register(new ScardCommand());
+    }
+
+    private static void registerHashCommands(CommandRegistry registry) {
+        registry.register(new HsetCommand());
+        registry.register(new HgetCommand());
+        registry.register(new HdelCommand());
+        registry.register(new HgetallCommand());
+        registry.register(new HkeysCommand());
+        registry.register(new HvalsCommand());
+        registry.register(new HlenCommand());
     }
 }
