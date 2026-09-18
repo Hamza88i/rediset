@@ -18,7 +18,12 @@ import io.rediset.command.commands.PingCommand;
 import io.rediset.command.commands.PttlCommand;
 import io.rediset.command.commands.RpopCommand;
 import io.rediset.command.commands.RpushCommand;
+import io.rediset.command.commands.SaddCommand;
+import io.rediset.command.commands.ScardCommand;
 import io.rediset.command.commands.SetCommand;
+import io.rediset.command.commands.SismemberCommand;
+import io.rediset.command.commands.SmembersCommand;
+import io.rediset.command.commands.SremCommand;
 import io.rediset.command.commands.TtlCommand;
 import io.rediset.command.commands.TypeCommand;
 
@@ -38,6 +43,7 @@ public final class CommandRegistryFactory {
         registerKeyCommands(registry);
         registerExpirationCommands(registry);
         registerListCommands(registry);
+        registerSetCommands(registry);
         return registry;
     }
 
@@ -72,5 +78,13 @@ public final class CommandRegistryFactory {
         registry.register(new LrangeCommand());
         registry.register(new LlenCommand());
         registry.register(new LindexCommand());
+    }
+
+    private static void registerSetCommands(CommandRegistry registry) {
+        registry.register(new SaddCommand());
+        registry.register(new SremCommand());
+        registry.register(new SmembersCommand());
+        registry.register(new SismemberCommand());
+        registry.register(new ScardCommand());
     }
 }
