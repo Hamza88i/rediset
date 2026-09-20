@@ -33,6 +33,11 @@ import io.rediset.command.commands.SmembersCommand;
 import io.rediset.command.commands.SremCommand;
 import io.rediset.command.commands.TtlCommand;
 import io.rediset.command.commands.TypeCommand;
+import io.rediset.command.commands.ZaddCommand;
+import io.rediset.command.commands.ZcardCommand;
+import io.rediset.command.commands.ZrangeCommand;
+import io.rediset.command.commands.ZremCommand;
+import io.rediset.command.commands.ZscoreCommand;
 
 /**
  * Builds a fully-populated {@link CommandRegistry}. Centralizing registration
@@ -52,6 +57,7 @@ public final class CommandRegistryFactory {
         registerListCommands(registry);
         registerSetCommands(registry);
         registerHashCommands(registry);
+        registerSortedSetCommands(registry);
         return registry;
     }
 
@@ -104,5 +110,13 @@ public final class CommandRegistryFactory {
         registry.register(new HkeysCommand());
         registry.register(new HvalsCommand());
         registry.register(new HlenCommand());
+    }
+
+    private static void registerSortedSetCommands(CommandRegistry registry) {
+        registry.register(new ZaddCommand());
+        registry.register(new ZscoreCommand());
+        registry.register(new ZrangeCommand());
+        registry.register(new ZremCommand());
+        registry.register(new ZcardCommand());
     }
 }

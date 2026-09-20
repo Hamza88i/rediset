@@ -48,3 +48,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   deterministically testable.
 - TTL commands: `EXPIRE`, `PEXPIRE`, `TTL`, `PTTL`, `PERSIST`, with consistent
   value-map/expiry-map invariants enforced in the storage engine.
+- Data structures with type-safe, binary-safe operations that never corrupt state
+  on a type mismatch:
+  - **List** (`ListValue`): `LPUSH`, `RPUSH`, `LPOP`, `RPOP`, `LRANGE`, `LLEN`,
+    `LINDEX`.
+  - **Set** (`SetValue`): `SADD`, `SREM`, `SMEMBERS`, `SISMEMBER`, `SCARD`.
+  - **Hash** (`HashValue`): `HSET`, `HGET`, `HDEL`, `HGETALL`, `HKEYS`, `HVALS`,
+    `HLEN`.
+  - **Sorted Set** (`SortedSetValue`): `ZADD`, `ZSCORE`, `ZRANGE` (with optional
+    `WITHSCORES`), `ZREM`, `ZCARD`.
+  - Aggregate keys are removed automatically when they become empty; a
+    `util.ByteArrayKey` wrapper gives binary payloads value equality.

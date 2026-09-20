@@ -94,6 +94,11 @@ print(s.recv(100))                    # b'$7\r\nRediSet\r\n'
 | `KEYS pattern` | Returns keys matching a glob pattern. |
 | `DBSIZE` | Returns the number of keys. |
 | `TYPE key` | Returns a key's value type, or `none`. |
+| `EXPIRE` / `PEXPIRE` / `TTL` / `PTTL` / `PERSIST` | Key time-to-live management. |
+| `LPUSH` / `RPUSH` / `LPOP` / `RPOP` / `LRANGE` / `LLEN` / `LINDEX` | List operations. |
+| `SADD` / `SREM` / `SMEMBERS` / `SISMEMBER` / `SCARD` | Set operations. |
+| `HSET` / `HGET` / `HDEL` / `HGETALL` / `HKEYS` / `HVALS` / `HLEN` | Hash operations. |
+| `ZADD` / `ZSCORE` / `ZRANGE` / `ZREM` / `ZCARD` | Sorted-set operations. |
 
 The full, always-current reference lives in
 [`docs/commands/command-reference.md`](docs/commands/command-reference.md).
